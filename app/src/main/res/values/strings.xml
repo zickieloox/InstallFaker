@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Install Faker</string>
+    <string name="fake_this_app">.Fake This App!</string>
+    <string name="activity_history_label">History</string>
+    <string name="btn_test">TEST</string>
+    <string name="toast_fake_this">Choose \".Fake This App!\" option.</string>
+    <string name="toast_working">It\'s working perfect!</string>
+    <string name="toast_copied"> - Copied to clipboard.</string>
+    <string name="toast_err_link">Error! Invalid Play store link.</string>
+    <string name="toast_err_change_pkgname">Error! Cannot change the package name. Try clearing the app data in Settings.</string>
+    <string name="toast_err_create_app">Error! Cannot create a new app. Try clearing the app data in Settings.</string>
+    <string name="toast_first_run">First run - Checking necessary files!</string>
+    <string name="toast_err_copy_assets">Error! Cannot copy assets file.</string>
+    <string name="toast_err_launch">Error! Cannot launch</string>
+    <string name="toast_empty_history">Empty History!</string>
+    <string name="toast_not_working">Sorry! It\'s not working. Try clearing the app data in Settings.</string>
+    <string name="toast_err_uninstall">Error! Cannot uninstall this app.</string>
+    <string name="menu_copy">Copy</string>
+    <string name="menu_remove">Remove</string>
+    <string name="menu_playstore">Play Store</string>
+    <string name="alert_msg_uninstall">You want to uninstall this app.</string>
+    <string name="contentDes_uninstall">Uninstall this app</string>
+    <string name="contentDes_more">Show popup menu</string>
+    <string name="dialog_title_sure">Are you sure?</string>
+    <string name="dialog_title_create_new">Create new app</string>
+    <string name="hint_package_name">Package name</string>
+    <string name="dialog_msg_create_new">If app name is left empty, the app name will be package name.</string>
+    <string name="toast_err_empty_pkg_name">Package name cannot be empty!</string>
+    <string name="hint_app_name">App Name</string>
+</resources>
