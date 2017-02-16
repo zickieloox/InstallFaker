@@ -21,8 +21,18 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="com.zic.test.test.test.test.test"
+            android:text="package name: com.zic.test.test.test"
+            android:textColor="@color/colorPrimary"
             android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/appNameItemTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="app name: Zickie Loox Application Name"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/dateItemTV"

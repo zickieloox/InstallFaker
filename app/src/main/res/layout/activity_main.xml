@@ -23,30 +23,31 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Zickie Loox"
+            android:textColor="@color/colorAccent"
             android:textSize="30sp" />
 
         <Button
-            android:background="@drawable/button_white"
             android:id="@+id/testBTN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/infoTV"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:background="@drawable/button_white"
             android:text="@string/btn_test"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="25sp" />
 
         <Button
-            android:background="@drawable/button_primary"
             android:id="@+id/historyBTN"
             android:layout_width="match_parent"
-            android:textColor="?android:attr/colorBackground"
             android:layout_height="wrap_content"
             android:layout_below="@+id/testBTN"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:background="@drawable/button_primary"
             android:text="@string/activity_history_label"
+            android:textColor="?android:attr/colorBackground"
             android:textSize="25sp" />
     </RelativeLayout>
 

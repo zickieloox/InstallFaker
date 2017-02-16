@@ -7,12 +7,15 @@
     tools:context="com.zic.installfaker.AddDialogFragment">
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/pkgNameTIL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
 
         <EditText
-            android:id="@+id/pkgNameEDT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_package_name"
@@ -22,12 +25,14 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:id="@+id/appNameTIL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
 
         <EditText
-            android:id="@+id/appNameEDT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_app_name"

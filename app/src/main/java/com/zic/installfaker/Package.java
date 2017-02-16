@@ -2,11 +2,13 @@ package com.zic.installfaker;
 
 class Package {
     private String pkgName;
+    private String appName;
     private long creationDate;
     private boolean installed = false;
 
-    Package(String pkgName, long creationDate) {
+    Package(String pkgName, String appName, long creationDate) {
         this.pkgName = pkgName;
+        this.appName = appName;
         this.creationDate = creationDate;
     }
 
@@ -14,16 +16,12 @@ class Package {
         return pkgName;
     }
 
-    void setPkgName(String pkgName) {
-        this.pkgName = pkgName;
+    String getAppName() {
+        return appName;
     }
 
     public long getCreationDate() {
         return creationDate;
-    }
-
-    public void setCreationDate(long creationDate) {
-        this.creationDate = creationDate;
     }
 
     boolean isInstalled() {

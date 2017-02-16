@@ -1,13 +1,12 @@
 package com.zic.installfaker;
 
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Calendar;
-import java.util.Date;
 
 class Utils {
 
@@ -34,7 +33,6 @@ class Utils {
 
             if (asRoot) {
                 stdin.write((cmd + "\n").getBytes());
-
             }
             stdin.write("exit\n".getBytes());
             stdin.flush();
@@ -62,7 +60,7 @@ class Utils {
         exeOutput = out.toString().trim(); //Trim to remove \n
         exeError = err.toString().trim();
 
-        // Commands is executable ot not
+        // Commands is executable or not
         return exeError.length() == 0;
     }
 
@@ -72,6 +70,12 @@ class Utils {
 
     static String getExeError() {
         return exeError;
+    }
+
+    /* Checks if external storage is available for read and write */
+    static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 
     static long getCurMilliSec() {

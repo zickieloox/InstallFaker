@@ -30,11 +30,14 @@ public class CreateApkActivity extends Activity {
     private static final String TESTING_PACKAGE_NAME = "com.zic.test";
     private String manifestPath;
     private String apkPath;
+    private static final String md5Sample = "70d2bb2774ce3e5eda35d57caa33dbaf";
+    //private static final String md5Apk = "9e38e37fba9631d1e999cf6bc15b17b2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        boolean firstRun = PrefUtils.isFirstRun(this);
         String filesDirPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         final String assetsDirName = "Zickie";
         String workingDirPath = filesDirPath + "/" + assetsDirName;
@@ -42,18 +45,45 @@ public class CreateApkActivity extends Activity {
         manifestPath = workingDirPath + "/AndroidManifest.xml";
         apkPath = workingDirPath + "/sample.apk";
 
+        // Check read & write
+        if (!Utils.isExternalStorageWritable()) {
+            Toast.makeText(this, getString(R.string.toast_err_writable), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create the working directory first
+        File file = new File(workingDirPath);
+        if (!file.exists()) {
+            Log.d(TAG, assetsDirName + " doesn't exist.");
+            file.mkdir();
+            if (!copyAssetsFile(assetsDirName, filesDirPath)) {
+                Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
+                this.finish();
+                return;
+            }
+            firstRun = false;
+        }
+
         // Check first run
-        if (PrefUtils.isFirstRun(this)) {
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_first_run), Toast.LENGTH_SHORT).show();
+        if (firstRun) {
             // Copy files in assets to $filesDirPath
             if (!copyAssetsFile(assetsDirName, filesDirPath)) {
                 Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
                 this.finish();
+                return;
             }
         }
 
-        Intent intentGet = this.getIntent();
-        Bundle bundleGet = intentGet.getExtras();
+        if (!MD5.checkMD5(md5Sample, new File(sampleManifestPath))) {
+            Log.e(TAG, "checkMD5: " + "files was corrupted");
+            if (!copyAssetsFile(assetsDirName, filesDirPath)) {
+                Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
+                this.finish();
+                return;
+            }
+        }
+
+        Bundle bundleGet = getIntent().getExtras();
         String pkgName = (String) bundleGet.get(Globals.KEY_PACKAGE_NAME);
         String appName = (String) bundleGet.get(Globals.KEY_APP_NAME);
         if (appName == null) {
@@ -97,8 +127,8 @@ public class CreateApkActivity extends Activity {
         newPkgInfoSet.addAll(pkgInfoSet);
         // Remove the old pkgInfo contains present pkgName - prevent duplicate
         for (String pkgInfo : newPkgInfoSet) {
-                if(pkgInfo.contains(pkgName))
-                    newPkgInfoSet.remove(pkgInfo);
+            if (pkgInfo.contains(pkgName))
+                newPkgInfoSet.remove(pkgInfo);
         }
         newPkgInfoSet.add(pkgName + "|" + Utils.getCurMilliSec());
         PrefUtils.putStringSet(this, Globals.KEY_PACKAGE_INFO_SET, newPkgInfoSet);

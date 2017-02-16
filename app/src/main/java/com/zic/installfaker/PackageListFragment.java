@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -34,6 +33,7 @@ public class PackageListFragment extends ListFragment implements View.OnClickLis
 
     private Set<String> pkgInfoSet = new HashSet<>();
     private String pkgName;
+    private String appName;
     private long creationDate;
     private PackageAdapter pkgAdapter;
     private Package curItem;
@@ -49,8 +49,9 @@ public class PackageListFragment extends ListFragment implements View.OnClickLis
         List<Package> packages = new ArrayList<>();
         for (String pkgInfo : pkgInfoSet) {
             pkgName = pkgInfo.split("[|]")[0];
+            appName = AppUtils.getAppName(getActivity(), pkgName);
             creationDate = Long.valueOf(pkgInfo.split("[|]")[1]);
-            packages.add(new Package(pkgName, creationDate));
+            packages.add(new Package(pkgName, appName, creationDate));
         }
 
         // Set installed for installed package
@@ -87,6 +88,12 @@ public class PackageListFragment extends ListFragment implements View.OnClickLis
 
     @Override
     public void onYesClick() {
+        // Get root access first
+        if (!Utils.exe("", true)) {
+            Toast.makeText(getActivity(), getString(R.string.toast_err_root_access), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!AppUtils.uninstall(curItem.getPkgName())) {
             Toast.makeText(getActivity(), getString(R.string.toast_err_uninstall), Toast.LENGTH_SHORT).show();
             return;
@@ -155,32 +162,36 @@ public class PackageListFragment extends ListFragment implements View.OnClickLis
 
             Package currentItem = getItem(position);
             TextView tvPkgNameItem = (TextView) view.findViewById(R.id.pkgNameItemTV);
+            TextView tvAppNameItem = (TextView) view.findViewById(R.id.appNameItemTV);
             TextView tvDateItem = (TextView) view.findViewById(R.id.dateItemTV);
             ImageButton btnUninstallIcon = (ImageButton) view.findViewById(R.id.uninstallIconBTN);
             ImageButton btnMoreIcon = (ImageButton) view.findViewById(R.id.moreIconBTN);
 
             assert currentItem != null;
             pkgName = currentItem.getPkgName();
+            appName = currentItem.getAppName();
             creationDate = currentItem.getCreationDate();
 
             // Calculate day number from creation date
             int day = (Utils.getDaysSinceEpoch(Utils.getCurMilliSec()) - (Utils.getDaysSinceEpoch(creationDate)));
-            String text;
+            String dayCounter;
             if (day < 1) {
-                text = "Today";
+                dayCounter = "Today";
             } else if (day < 2) {
-                text = 1 + " day ago";
+                dayCounter = 1 + " day ago";
             } else {
                 DecimalFormat format = new DecimalFormat("#");
-                text = format.format(day) + " days ago";
+                dayCounter = format.format(day) + " days ago";
             }
+
             tvPkgNameItem.setText(pkgName);
-            tvDateItem.setText(text);
+            tvAppNameItem.setText(appName);
+            tvDateItem.setText(dayCounter);
 
             btnMoreIcon.setTag(currentItem);
             btnMoreIcon.setOnClickListener(PackageListFragment.this);
 
-            // If this current package is installed, hide the uninstall icon, $tvPkgNameItem with strike_through and make current item is not clickable
+            // If this current package is not installed, hide the uninstall icon, $tvPkgNameItem with strike-through and make current item is not clickable
             if (!currentItem.isInstalled()) {
                 tvPkgNameItem.setPaintFlags(tvPkgNameItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 btnUninstallIcon.setVisibility(View.INVISIBLE);
