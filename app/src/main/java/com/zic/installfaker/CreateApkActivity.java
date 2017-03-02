@@ -30,8 +30,6 @@ public class CreateApkActivity extends Activity {
     private static final String TESTING_PACKAGE_NAME = "com.zic.test";
     private String manifestPath;
     private String apkPath;
-    private static final String md5Sample = "70d2bb2774ce3e5eda35d57caa33dbaf";
-    //private static final String md5Apk = "9e38e37fba9631d1e999cf6bc15b17b2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +72,9 @@ public class CreateApkActivity extends Activity {
             }
         }
 
-        if (!MD5.checkMD5(md5Sample, new File(sampleManifestPath))) {
-            Log.e(TAG, "checkMD5: " + "files was corrupted");
+        // Check existing
+        if (!(new File(sampleManifestPath)).exists() || !(new File(apkPath)).exists()) {
+            Log.e(TAG, "checkMD5: " + "files was not found");
             if (!copyAssetsFile(assetsDirName, filesDirPath)) {
                 Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
                 this.finish();
@@ -123,7 +122,7 @@ public class CreateApkActivity extends Activity {
         // Add $pkgName to the old $pkgInfoSet and save to SharedPreferences
         Set<String> pkgInfoSet = new HashSet<>();
         Set<String> newPkgInfoSet = new HashSet<>();
-        pkgInfoSet = PrefUtils.getStringSet(this, Globals.KEY_PACKAGE_INFO_SET, pkgInfoSet);
+        pkgInfoSet = PrefUtils.getStringSet(this, Globals.PREF_KEY_PACKAGE_INFO_SET, pkgInfoSet);
         newPkgInfoSet.addAll(pkgInfoSet);
         // Remove the old pkgInfo contains present pkgName - prevent duplicate
         for (String pkgInfo : newPkgInfoSet) {
@@ -131,7 +130,7 @@ public class CreateApkActivity extends Activity {
                 newPkgInfoSet.remove(pkgInfo);
         }
         newPkgInfoSet.add(pkgName + "|" + Utils.getCurMilliSec());
-        PrefUtils.putStringSet(this, Globals.KEY_PACKAGE_INFO_SET, newPkgInfoSet);
+        PrefUtils.putStringSet(this, Globals.PREF_KEY_PACKAGE_INFO_SET, newPkgInfoSet);
 
         this.finish();
     }

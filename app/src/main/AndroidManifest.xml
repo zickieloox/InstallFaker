@@ -45,9 +45,6 @@
         <activity
             android:name=".CreateApkActivity"
             android:noHistory="true" />
-        <activity
-            android:name=".HistoryActivity"
-            android:label="@string/activity_history_label" />
     </application>
 
 </manifest>

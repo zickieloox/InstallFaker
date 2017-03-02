@@ -7,8 +7,8 @@ android {
         applicationId "com.zic.installfaker"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 2
-        versionName "1.0.2"
+        versionCode 3
+        versionName "1.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -22,7 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/commons-io-2.4.jar')
-    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.2.0'
     compile files('libs/zip4j_1.3.2.jar')
-    compile 'com.android.support:design:25.1.1'
+    compile 'com.android.support:design:25.2.0'
 }

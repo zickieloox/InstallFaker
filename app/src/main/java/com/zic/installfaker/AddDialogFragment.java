@@ -1,19 +1,21 @@
 package com.zic.installfaker;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 
 public class AddDialogFragment extends DialogFragment {
+
+    private String Z_SYMBOL = "_Z_";
+    private String DOT = ".";
 
     @NonNull
     @Override
@@ -21,8 +23,7 @@ public class AddDialogFragment extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.dialog_add, null);
+        View view = View.inflate(getContext(), R.layout.dialog_add, null);
 
         final TextInputLayout tilPkgName = (TextInputLayout) view.findViewById(R.id.pkgNameTIL);
         final TextInputLayout tilAppName = (TextInputLayout) view.findViewById(R.id.appNameTIL);
@@ -67,7 +68,7 @@ public class AddDialogFragment extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (!s.toString().contains(".")) {
+                if (!s.toString().contains(DOT)) {
                     tilPkgName.setErrorEnabled(true);
                     tilPkgName.setError(getString(R.string.til_err_invalid_pkg_name));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -77,7 +78,7 @@ public class AddDialogFragment extends DialogFragment {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 }
 
-                tilAppName.getEditText().setText("_Z_" + s.toString().trim());
+                tilAppName.getEditText().setText(Z_SYMBOL + s.toString().trim());
 
             }
 

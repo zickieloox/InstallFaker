@@ -52,7 +52,7 @@ class AppUtils {
 
     static boolean uninstall(String pkgName) {
         if (!Utils.exe("pm uninstall " + pkgName, true) && !Utils.getExeError().contains("WARNING")) {
-            Log.e(TAG , "uninstall: " + Utils.getExeError());
+            Log.e(TAG, "uninstall: " + Utils.getExeError());
             return false;
         }
 
