@@ -1,40 +1,40 @@
-package com.zic.installfaker;
+package com.zic.installfaker.data;
 
-class Package {
+public class Package {
     private String pkgName;
     private String appName;
     private long creationTime;
     private String dayCounter;
     private boolean installed = false;
 
-    Package(String pkgName, String appName, long creationTime, String dayCounter) {
+    public Package(String pkgName, String appName, long creationTime, String dayCounter) {
         this.pkgName = pkgName;
         this.appName = appName;
         this.creationTime = creationTime;
         this.dayCounter = dayCounter;
     }
 
-    String getPkgName() {
+    public String getPkgName() {
         return pkgName;
     }
 
-    String getAppName() {
+    public String getAppName() {
         return appName;
     }
 
-    long getCreationTime() {
+    public long getCreationTime() {
         return creationTime;
     }
 
-    String getDayCounter() {
+    public String getDayCounter() {
         return dayCounter;
     }
 
-    boolean isInstalled() {
+    public boolean isInstalled() {
         return installed;
     }
 
-    void setInstalled(boolean installed) {
+    public void setInstalled(boolean installed) {
         this.installed = installed;
     }
 

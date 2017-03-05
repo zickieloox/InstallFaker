@@ -1,4 +1,4 @@
-package com.zic.installfaker;
+package com.zic.installfaker.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +10,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-class AppUtils {
+public class AppUtils {
 
     private static final String TAG = "AppUtils";
 
-    static List<String> getInstalledApps(Context context) {
+    public static List<String> getInstalledApps(Context context) {
 
         List<String> installedApps = new ArrayList<>();
         List<PackageInfo> apps = context.getPackageManager().getInstalledPackages(0);
@@ -25,7 +25,7 @@ class AppUtils {
         return installedApps;
     }
 
-    static String getAppName(Context context, String pkgName) {
+    public static String getAppName(Context context, String pkgName) {
         PackageManager pm = context.getPackageManager();
         ApplicationInfo ai;
         try {
@@ -37,7 +37,7 @@ class AppUtils {
 
     }
 
-    static boolean launch(Context context, String pkgName) {
+    public static boolean launch(Context context, String pkgName) {
         // Launch selected Package app
         PackageManager pm = context.getPackageManager();
         Intent intentLaunch = pm.getLaunchIntentForPackage(pkgName);
@@ -50,9 +50,9 @@ class AppUtils {
         return true;
     }
 
-    static boolean uninstall(String pkgName) {
-        if (!Utils.exe("pm uninstall " + pkgName, true) && !Utils.getExeError().contains("WARNING")) {
-            Log.e(TAG, "uninstall: " + Utils.getExeError());
+    public static boolean uninstall(String pkgName) {
+        if (!ExeUtils.run("pm uninstall " + pkgName, true) && !ExeUtils.getExeError().contains("WARNING")) {
+            Log.e(TAG, "uninstall: " + ExeUtils.getExeError());
             return false;
         }
 

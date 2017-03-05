@@ -1,4 +1,4 @@
-package com.zic.installfaker;
+package com.zic.installfaker.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +12,8 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.zic.installfaker.R;
 
 public class SettingsFragment extends Fragment implements View.OnClickListener {
     private static final String TESTING_PACKAGE_NAME = "com.zic.test";

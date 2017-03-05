@@ -1,9 +1,12 @@
-package com.zic.installfaker;
+package com.zic.installfaker.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.zic.installfaker.data.Globals;
+import com.zic.installfaker.R;
 
 public class GetPackageNameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {

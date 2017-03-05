@@ -1,6 +1,5 @@
-package com.zic.installfaker;
+package com.zic.installfaker.utils;
 
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -8,12 +7,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-class Utils {
+public class ExeUtils {
 
-    private static final String TAG = "Utils";
+    private static final String TAG = "ExeUtils";
     private static String exeOutput, exeError;
 
-    static Boolean exe(String cmd, boolean asRoot) {
+    public static Boolean run(String cmd, boolean asRoot) {
         StringBuilder out = new StringBuilder();
         StringBuilder err = new StringBuilder();
         try {
@@ -64,25 +63,11 @@ class Utils {
         return exeError.length() == 0;
     }
 
-    static String getExeOutput() {
+    public static String getExeOutput() {
         return exeOutput;
     }
 
-    static String getExeError() {
+    public static String getExeError() {
         return exeError;
-    }
-
-    /* Checks if external storage is available for read and write */
-    static boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state);
-    }
-
-    static long getCurMilliSec() {
-        return System.currentTimeMillis();
-    }
-
-    static int getDaysSinceEpoch(long milliSec) {
-        return (int) milliSec / (1000 * 60 * 60 * 24);
     }
 }

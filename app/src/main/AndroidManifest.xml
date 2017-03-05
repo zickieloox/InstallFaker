@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +19,7 @@
         </activity>
 
         <activity
-            android:name=".GetPackageNameActivity"
+            android:name=".activity.GetPackageNameActivity"
             android:excludeFromRecents="true"
             android:label="@string/fake_this_app"
             android:noHistory="true">
@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateApkActivity"
+            android:name=".activity.CreateApkActivity"
             android:noHistory="true" />
     </application>
 

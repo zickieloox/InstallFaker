@@ -1,4 +1,4 @@
-package com.zic.installfaker;
+package com.zic.installfaker.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.softsec.editor.MainAxmlEditor;
+import com.zic.installfaker.data.Globals;
+import com.zic.installfaker.R;
+import com.zic.installfaker.utils.FileUtils;
+import com.zic.installfaker.utils.PrefUtils;
+import com.zic.installfaker.utils.TimeUtils;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -44,7 +49,7 @@ public class CreateApkActivity extends Activity {
         apkPath = workingDirPath + "/sample.apk";
 
         // Check read & write
-        if (!Utils.isExternalStorageWritable()) {
+        if (!FileUtils.isExternalStorageWritable()) {
             Toast.makeText(this, getString(R.string.toast_err_writable), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -74,7 +79,7 @@ public class CreateApkActivity extends Activity {
 
         // Check existing
         if (!(new File(sampleManifestPath)).exists() || !(new File(apkPath)).exists()) {
-            Log.e(TAG, "checkMD5: " + "files was not found");
+            Log.e(TAG, "files not found");
             if (!copyAssetsFile(assetsDirName, filesDirPath)) {
                 Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
                 this.finish();
@@ -85,6 +90,7 @@ public class CreateApkActivity extends Activity {
         Bundle bundleGet = getIntent().getExtras();
         String pkgName = (String) bundleGet.get(Globals.KEY_PACKAGE_NAME);
         String appName = (String) bundleGet.get(Globals.KEY_APP_NAME);
+
         if (appName == null) {
             appName = "";
         }
@@ -102,6 +108,7 @@ public class CreateApkActivity extends Activity {
             return;
         }
 
+        // Change the package name and app name in $sampleManifestPath
         if (MainAxmlEditor.change(sampleManifestPath, manifestPath, pkgName, appName)) {
             if (copyManifestToApk()) {
                 // Install sample apk with new package name
@@ -119,6 +126,10 @@ public class CreateApkActivity extends Activity {
             return;
         }
 
+        saveToPref(pkgName);
+    }
+
+    private void saveToPref(String pkgName) {
         // Add $pkgName to the old $pkgInfoSet and save to SharedPreferences
         Set<String> pkgInfoSet = new HashSet<>();
         Set<String> newPkgInfoSet = new HashSet<>();
@@ -129,7 +140,7 @@ public class CreateApkActivity extends Activity {
             if (pkgInfo.contains(pkgName))
                 newPkgInfoSet.remove(pkgInfo);
         }
-        newPkgInfoSet.add(pkgName + "|" + Utils.getCurMilliSec());
+        newPkgInfoSet.add(pkgName + "|" + TimeUtils.getCurMilliSec());
         PrefUtils.putStringSet(this, Globals.PREF_KEY_PACKAGE_INFO_SET, newPkgInfoSet);
 
         this.finish();

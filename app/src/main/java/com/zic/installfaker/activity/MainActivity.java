@@ -1,11 +1,8 @@
-package com.zic.installfaker;
+package com.zic.installfaker.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,8 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.zic.installfaker.R;
+import com.zic.installfaker.adapter.MainPagerAdapter;
+import com.zic.installfaker.dialog.AddDialogFragment;
+import com.zic.installfaker.fragment.PackageRecyclerFragment;
+import com.zic.installfaker.fragment.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        MyAdapter myAdapter = new MyAdapter(getSupportFragmentManager());
-        myAdapter.addFragment(new PackageRecyclerFragment(), getString(R.string.tab_history));
-        myAdapter.addFragment(new SettingsFragment(), getString(R.string.tab_settings));
-        viewPager.setAdapter(myAdapter);
+        MainPagerAdapter mainAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        mainAdapter.addFragment(new PackageRecyclerFragment(), getString(R.string.tab_history));
+        mainAdapter.addFragment(new SettingsFragment(), getString(R.string.tab_settings));
+        viewPager.setAdapter(mainAdapter);
     }
 
     @Override
@@ -73,35 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    class MyAdapter extends FragmentPagerAdapter {
-        private List<Fragment> myFragments = new ArrayList<>();
-        private List<String> myFragmentTitles = new ArrayList<>();
-
-        MyAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        private void addFragment(Fragment fragment, String title) {
-            myFragments.add(fragment);
-            myFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return myFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return myFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return myFragmentTitles.get(position);
-        }
     }
 
 }

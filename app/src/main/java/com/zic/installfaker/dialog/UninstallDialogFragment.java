@@ -1,4 +1,4 @@
-package com.zic.installfaker;
+package com.zic.installfaker.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+
+import com.zic.installfaker.R;
+import com.zic.installfaker.listener.OnUninstallDialogClickListener;
 
 public class UninstallDialogFragment extends DialogFragment {
 

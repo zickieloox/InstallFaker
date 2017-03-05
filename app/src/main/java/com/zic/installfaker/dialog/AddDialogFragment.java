@@ -1,4 +1,4 @@
-package com.zic.installfaker;
+package com.zic.installfaker.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -11,6 +11,10 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+
+import com.zic.installfaker.data.Globals;
+import com.zic.installfaker.R;
+import com.zic.installfaker.activity.CreateApkActivity;
 
 public class AddDialogFragment extends DialogFragment {
 
