@@ -7,6 +7,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.jrummyapps.android.shell.CommandResult;
+import com.jrummyapps.android.shell.Shell;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +41,7 @@ public class AppUtils {
     }
 
     public static boolean launch(Context context, String pkgName) {
-        // Launch selected Package app
+
         PackageManager pm = context.getPackageManager();
         Intent intentLaunch = pm.getLaunchIntentForPackage(pkgName);
         if (intentLaunch != null) {
@@ -51,8 +54,9 @@ public class AppUtils {
     }
 
     public static boolean uninstall(String pkgName) {
-        if (!ExeUtils.run("pm uninstall " + pkgName, true) && !ExeUtils.getExeError().contains("WARNING")) {
-            Log.e(TAG, "uninstall: " + ExeUtils.getExeError());
+        CommandResult result = Shell.SU.run("pm uninstall " + pkgName);
+        if (result.exitCode != 0) {
+            Log.e(TAG, "uninstall: " + result.getStderr());
             return false;
         }
 

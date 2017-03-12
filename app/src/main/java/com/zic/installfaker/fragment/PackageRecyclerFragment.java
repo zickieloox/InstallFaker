@@ -1,5 +1,6 @@
 package com.zic.installfaker.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -11,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.zic.installfaker.data.Globals;
+import com.jrummyapps.android.shell.Shell;
 import com.zic.installfaker.R;
 import com.zic.installfaker.adapter.PackageAdapter;
+import com.zic.installfaker.data.Globals;
 import com.zic.installfaker.data.Package;
 import com.zic.installfaker.listener.OnUninstallDialogClickListener;
 import com.zic.installfaker.utils.AppUtils;
-import com.zic.installfaker.utils.ExeUtils;
 import com.zic.installfaker.utils.PrefUtils;
 import com.zic.installfaker.utils.TimeUtils;
 
@@ -29,6 +30,7 @@ import java.util.Set;
 
 public class PackageRecyclerFragment extends Fragment implements OnUninstallDialogClickListener {
 
+    private static final String TAG = "PackageRecyclerFragment";
     private Set<String> pkgInfoSet = new HashSet<>();
     private PackageAdapter pkgAdapter;
     private SwipeRefreshLayout refreshLayout;
@@ -123,20 +125,40 @@ public class PackageRecyclerFragment extends Fragment implements OnUninstallDial
 
     public void onUninstallClick() {
         Package curPackage = pkgAdapter.getCurPackage();
+        String pkgName = curPackage.getPkgName();
 
-        // Get root access first
-        if (!ExeUtils.run("", true)) {
-            Toast.makeText(getActivity(), getString(R.string.toast_err_root_access), Toast.LENGTH_SHORT).show();
-            return;
+        new UninstallTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pkgName);
+    }
+
+    private class UninstallTask extends AsyncTask<String, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... params) {
+
+            if (!Shell.SU.available()) {
+                return 1;
+            } else {
+                if (!AppUtils.uninstall(params[0])) {
+                    return 2;
+                }
+            }
+
+            return 0;
         }
 
-        // Uninstall selected package
-        if (!AppUtils.uninstall(curPackage.getPkgName())) {
-            Toast.makeText(getActivity(), getString(R.string.toast_err_uninstall), Toast.LENGTH_SHORT).show();
-            return;
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == 0) {
+                Package curPackage = pkgAdapter.getCurPackage();
+                curPackage.setInstalled(false);
+                pkgAdapter.notifyDataSetChanged();
+            } else if (result == 1) {
+                Toast.makeText(getActivity(), getString(R.string.toast_err_root_access), Toast.LENGTH_SHORT).show();
+            } else if (result == 2) {
+                Toast.makeText(getActivity(), getString(R.string.toast_err_uninstall), Toast.LENGTH_SHORT).show();
+            }
+
         }
-        curPackage.setInstalled(false);
-        pkgAdapter.notifyDataSetChanged();
     }
 
 }

@@ -35,6 +35,7 @@ public class UninstallDialogFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                         callback.onUninstallClick();
                     }
                 })
