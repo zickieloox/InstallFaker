@@ -7,8 +7,11 @@ import java.util.Set;
 
 public class PrefUtils {
 
+    private static final String TAG = "PrefUtils";
+    private static final String PREFS_NAME = "prefs";
+
     private static SharedPreferences getSharedPreferences(Context context) {
-        return context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     public static Set<String> getStringSet(final Context context, final String key, final Set<String> defaultValue) {
@@ -18,6 +21,7 @@ public class PrefUtils {
     public static boolean putStringSet(final Context context, final String key, final Set<String> value) {
         final SharedPreferences.Editor editor = PrefUtils.getSharedPreferences(context).edit();
 
+        editor.remove(key);
         editor.putStringSet(key, value);
 
         return editor.commit();

@@ -54,19 +54,6 @@ public class CreateApkActivity extends Activity {
             return;
         }
 
-        // Create the working directory first
-        File file = new File(workingDirPath);
-        if (!file.exists()) {
-            Log.d(TAG, assetsDirName + " doesn't exist.");
-            file.mkdir();
-            if (!copyAssetsFile(assetsDirName, filesDirPath)) {
-                Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
-                this.finish();
-                return;
-            }
-            firstRun = false;
-        }
-
         // Check first run
         if (firstRun) {
             // Copy files in assets to $filesDirPath
@@ -77,9 +64,21 @@ public class CreateApkActivity extends Activity {
             }
         }
 
+        // Create the working directory first
+        File file = new File(workingDirPath);
+        if (!file.exists()) {
+            Log.d(TAG, assetsDirName + " doesn't exist.");
+            file.mkdir();
+            if (!copyAssetsFile(assetsDirName, filesDirPath)) {
+                Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
+                this.finish();
+                return;
+            }
+        }
+
         // Check existing
         if (!(new File(sampleManifestPath)).exists() || !(new File(apkPath)).exists()) {
-            Log.e(TAG, "files not found");
+            Log.e(TAG, "Files not found");
             if (!copyAssetsFile(assetsDirName, filesDirPath)) {
                 Toast.makeText(this, getString(R.string.toast_err_copy_assets), Toast.LENGTH_SHORT).show();
                 this.finish();
@@ -110,23 +109,20 @@ public class CreateApkActivity extends Activity {
 
         // Change the package name and app name in $sampleManifestPath
         if (MainAxmlEditor.change(sampleManifestPath, manifestPath, pkgName, appName)) {
-            if (copyManifestToApk()) {
-                // Install sample apk with new package name
-                installApk();
 
-                Toast.makeText(this, pkgName, Toast.LENGTH_SHORT).show();
+            saveToPref(pkgName);
+
+            if (copyManifestToApk()) {
+                installApk();
             } else {
                 Toast.makeText(this, getString(R.string.toast_err_create_app), Toast.LENGTH_LONG).show();
                 this.finish();
-                return;
             }
         } else {
             Toast.makeText(this, getString(R.string.toast_err_change_pkgname), Toast.LENGTH_LONG).show();
             this.finish();
-            return;
         }
 
-        saveToPref(pkgName);
     }
 
     private void saveToPref(String pkgName) {
@@ -135,11 +131,13 @@ public class CreateApkActivity extends Activity {
         Set<String> newPkgInfoSet = new HashSet<>();
         pkgInfoSet = PrefUtils.getStringSet(this, Globals.PREF_KEY_PACKAGE_INFO_SET, pkgInfoSet);
         newPkgInfoSet.addAll(pkgInfoSet);
-        // Remove the old pkgInfo contains present pkgName - prevent duplicate
-        for (String pkgInfo : newPkgInfoSet) {
+
+        // Remove the old $pkgInfo contains present pkgName - prevent duplicate
+        for (String pkgInfo : pkgInfoSet) {
             if (pkgInfo.contains(pkgName))
                 newPkgInfoSet.remove(pkgInfo);
         }
+
         newPkgInfoSet.add(pkgName + "|" + TimeUtils.getCurMilliSec());
         PrefUtils.putStringSet(this, Globals.PREF_KEY_PACKAGE_INFO_SET, newPkgInfoSet);
 
